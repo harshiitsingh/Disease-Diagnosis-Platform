@@ -6,13 +6,15 @@ from flask import Flask, render_template, request, send_from_directory
 app = Flask(__name__)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-UPLOAD_FOLDER = "C:\\Users\\Harshit Singh\\Music\\Deep Learning\\Skin Cancer\\uploads"
+UPLOAD_FOLDER =  "C:\\My Repos\\Disease-Diagnosis-Platform\\uploads"
 STATIC_FOLDER = "static"
 
 # Load model
 cnn_model = tf.keras.models.load_model(
-    "C:\\Users\\Harshit Singh\\Music\\Deep Learning\\Skin Cancer\\static\\models\\model(k=5) (1).hdf5"
+    "C:\\My Repos\\Disease-Diagnosis-Platform\\static\\models\\model(k=5) (1).hdf5"
 )
+
+pneumonia_model = tf.keras.models.load_model("C:\\My Repos\\Disease-Diagnosis-Platform\\static\\models\\model(k=5) (1).hdf5")
 
 IMAGE_SIZE = 299
 
@@ -71,6 +73,26 @@ def upload_file():
 
     return render_template(
         "classify.html", image_file_name=file.filename, label=label, prob=prob
+    )
+
+@app.route("/pneumonia", methods=["POST", "GET"])
+def pneu_upload_file():
+
+    if request.method == "GET":
+        return render_template("home.html")
+
+    else:
+        file = request.files["image"]
+        upload_image_path = os.path.join(UPLOAD_FOLDER, file.filename)
+        print(upload_image_path)
+        file.save(upload_image_path)
+
+        label, prob = classify(pneumonia_model, upload_image_path)
+
+        prob = round((prob * 100), 2)
+
+    return render_template(
+        "pneumonia.html", image_file_name=file.filename, label=label, prob=prob
     )
 
 
