@@ -90,12 +90,15 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        <a href="#" target="_blank" rel="noopener noreferrer">
-          Made by Saurav and Harshit.
-          {/* <span className={styles.logo}>
-            <Image src="/github.svg" alt="Vercel Logo" width={72} height={16} />
-          </span> */}
+        Made by&nbsp;
+        <a href="https://github.com/harshiitsingh" target="_blank" rel="noopener noreferrer">
+          Harshit
         </a>
+        &nbsp;and&nbsp;
+        <a href="https://github.com/oyesaurav" target="_blank" rel="noopener noreferrer">
+          Saurav
+        </a>
+
       </footer>
     </div>
   )
