@@ -40,10 +40,10 @@
 }
 
 .footer a {
-  display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
+  /* flex-grow: 1; */
+  text-decoration:underline;
 }
 
 .title a {

@@ -1,9 +1,16 @@
 import os
-
+from flask_cors import CORS
 import tensorflow as tf
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type' 
+app.config['SESSION_COOKIE_DOMAIN'] = False
+app.config['Access-Control-Allow-Credentials'] = True
+app.config['Access-Control-Allow-Origin'] = "*"
+app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+
+cors = CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 UPLOAD_FOLDER =  "C:\\My Repos\\Disease-Diagnosis-Platform\\uploads"
@@ -62,7 +69,7 @@ def upload_file():
         return render_template("home.html")
 
     else:
-        file = request.files["image"]
+        file = request.files['image']
         upload_image_path = os.path.join(UPLOAD_FOLDER, file.filename)
         print(upload_image_path)
         file.save(upload_image_path)
@@ -71,9 +78,10 @@ def upload_file():
 
         prob = round((prob * 100), 2)
 
-    return render_template(
-        "classify.html", image_file_name=file.filename, label=label, prob=prob
-    )
+    return jsonify({
+        label,
+        prob
+    })
 
 @app.route("/pneumonia", methods=["POST", "GET"])
 def pneu_upload_file():
